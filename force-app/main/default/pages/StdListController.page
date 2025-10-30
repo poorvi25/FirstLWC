@@ -1,0 +1,43 @@
+<apex:page standardController="Account" recordSetVar="accountList">
+    <apex:form >
+    <apex:pageBlock title="Account Lists" id="accounts_list">
+        Filter:
+        <apex:selectList value="{!filterId}" size="1">
+         
+                <apex:selectOptions value="{! listViewOptions}"/>
+                <apex:actionSupport event="onchange" reRender="accounts_list"/>
+          
+        </apex:selectList>
+        <apex:pageBlockTable value="{!accountList}" var="acc">
+        <apex:column value="{! acc.Name}"/>
+        <apex:column value="{! acc.Phone}"/>
+        <apex:column value="{! acc.Rating}"/>
+        <apex:column value="{! acc.Type}"/>   
+        </apex:pageBlockTable>    
+    </apex:pageBlock>
+        <!--Pagination-->
+        <table style="width:100">
+            <tr>
+            <td>
+                Page: <apex:outputText value="{!PageNumber} of {!CEILING(ResultSize/PageSize)}"/>
+        
+            </td>
+            <td>  
+                <apex:commandLink action="{! Previous}" value="<<Previous" rendered="{!HasPrevious}"/>
+                <apex:outputText style="color:#ccc;" value="<<Previous" rendered="{!NOT(HasPrevious)}"/>
+                &nbsp;&nbsp;
+                <apex:commandLink action="{! Next}" value="Next>>" rendered="{!HasNext}"/>
+                <apex:outputText style="color:#ccc;" value="Next>>" rendered="{!NOT(HasNext)}"/>
+            </td>
+            <td>
+            Records Per Page:
+            <apex:selectList value="{! PageSize}" size="1">
+                <apex:selectOption itemValue="5" itemLabel="5"/>
+                <apex:selectOption itemValue="20" itemLabel="20"/>
+                <apex:actionSupport event="onchange" reRender="accounts_List"/>
+            </apex:selectList>
+            </td>
+            </tr>
+        </table>
+   </apex:form>
+</apex:page>

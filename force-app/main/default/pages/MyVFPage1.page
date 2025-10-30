@@ -1,0 +1,20 @@
+<apex:page >
+    <p>
+        Test VF Page
+    </p>
+    <apex:pageBlock title="A block title">
+        <apex:pageBlockSection title="First section title">
+            {! $User.FirstName & '-' & $User.LastName}
+            {! $User.username}
+            <p>
+                Today's Date is {!TODAY()}
+            </p>
+            <p>
+              {! IF($User.isActive, $User.username, 'inactive')}  
+            </p>
+        </apex:pageBlockSection>
+         <apex:pageBlockSection title="Second section title">
+            Hello World!
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

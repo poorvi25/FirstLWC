@@ -1,0 +1,9 @@
+<aura:component >
+    <aura:attribute name="fName" type="String" default="Poorvi"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <h1>
+    My Name is: {!v.fName}
+    </h1>
+                   
+	
+</aura:component>

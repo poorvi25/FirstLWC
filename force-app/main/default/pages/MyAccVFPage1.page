@@ -1,0 +1,35 @@
+<apex:page standardController="Account" extensions="AccVFPageExtension" action="{!URLreturn}">
+    <apex:form >
+        {!Message}
+        <apex:pageBlock title="Account">
+            <apex:pageBlockSection columns="1">
+            <apex:inputField value="{!Account.Name}"/>
+            <apex:inputField value="{!Account.Phone}"/>
+            <apex:inputField value="{!Account.Rating}"/>
+            <apex:inputField value="{!Account.Active__c}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockButtons >
+        <apex:commandButton value="Save" action="{!save}"/>
+        <apex:commandButton value="Cancel" action="{!cancel}" immediate="true"/>
+        <apex:commandButton value="Custom Cancel" action="{!customCancel}" immediate="true"/>
+        </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <apex:pageBlock title="Contacts">
+            <apex:pageBlockTable value="{!Account.contacts}" var="con">
+            <apex:column >
+            <apex:outputLink value="{! URLFOR($Action.Contact.Edit, con.Id)}">
+            Edit
+            </apex:outputLink>
+            <apex:outputLink value="{! URLFOR($Action.Contact.Delete, con.Id)}">
+            Del
+            </apex:outputLink> 
+            </apex:column>
+                
+                <apex:column value="{!con.Name}"/>
+                <apex:column value="{!con.Email}"/>
+            </apex:pageBlockTable>
+        
+        
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

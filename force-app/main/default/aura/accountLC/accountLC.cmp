@@ -1,0 +1,15 @@
+<aura:component controller="AccountController"
+                implements="flexipage:availableForRecordHome,force:hasRecordId" 
+                access="global" >
+    
+    <aura:attribute name="accList" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <lightning:select aura:id="select1" name="select1" label="Select an Account">
+     <option value="null">None</option>
+      <aura:iteration items="{!v.accList}" var="item">
+      <option value="{!item.Id}">{!item.Name}</option>        
+      </aura:iteration>  
+    </lightning:select>                                                              	
+</aura:component>
