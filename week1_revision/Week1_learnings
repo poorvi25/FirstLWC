@@ -1,0 +1,25 @@
+🧠 STEP 1 – Understand Apex (Conceptual)
+🩵 What is Apex?
+
+Apex is Salesforce’s programming language, similar to Java.
+
+It runs on the Salesforce platform, used for business logic, automation, and database operations.
+
+Think of Apex as the “brain” behind your Salesforce components — when buttons are clicked, records updated, or logic applied, Apex defines what happens.
+
+⚙️ Where Apex Fits in Salesforce:
+Layer	Description
+UI Layer (Front-end)	Lightning pages, Lightning Web Components (LWC)
+Server-side Logic (Backend)	Apex classes, triggers
+Database Layer	Salesforce Objects (Accounts, Contacts, etc.)
+
+When you use Apex, you’re writing backend logic that manipulates data stored in Salesforce objects.
+
+🧩 Apex Class = A Logical Container
+
+An Apex Class groups related methods (functions) together.
+
+Example analogy:
+
+A “Remote Control” class has functions: turnOn(), turnOff(), increaseVolume()
+Similarly, an “AccountUtility” class can have: getAccounts(), createAccount(), deleteAccount()
