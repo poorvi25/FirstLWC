@@ -27,7 +27,7 @@ Similarly, an “AccountUtility” class can have: getAccounts(), createAccount(
 
 ⚙️ WEEK 1 → DAY 2 (Apex Trigger Fundamentals + Hands-on)
 
-📅 Date: Oct 30
+
 🎯 Goal: Understand what an Apex Trigger is, when and how it runs, and deploy your first trigger in VS Code.
 
 🧠 STEP 1 – Understand What a Trigger Is
@@ -56,7 +56,7 @@ before update	Before existing record is updated	Validate changes
 after update	After record is updated	Trigger further actions
 before/after delete	When record is deleted	Clean up related data⚙️ WEEK 1 → DAY 2 (Apex Trigger Fundamentals + Hands-on)
 
-📅 Date: Oct 30
+
 🎯 Goal: Understand what an Apex Trigger is, when and how it runs, and deploy your first trigger in VS Code.
 
 🧠 STEP 1 – Understand What a Trigger Is
@@ -84,3 +84,33 @@ after insert	After record is saved	Create related records
 before update	Before existing record is updated	Validate changes
 after update	After record is updated	Trigger further actions
 before/after delete	When record is deleted	Clean up related data
+
+⚡ WEEK 1 → DAY 3 (LWC Fundamentals + Hands-on “Hello World”)
+
+🎯 Goal: Understand what LWC is, how it fits into Salesforce, and build your first component end-to-end in VS Code.
+
+🧠 STEP 1 – What is LWC
+
+Lightning Web Components (LWC) = Salesforce’s modern front-end framework built on standard JavaScript, HTML, and CSS.
+
+It lets you create fast, reusable UI components that talk to Salesforce data using Apex or built-in wire adapters.
+
+Think of LWC as the “visual face” of your Apex logic.
+
+⚙️ STEP 2 – Why LWC (Compared to Aura)
+Feature	LWC	Aura
+Based on Modern Web Standards	✅ Yes	❌ Older Framework
+Speed & Performance	⚡ Fast (JavaScript Engine)	🐢 Slower
+Developer Experience	VS Code + Modules	XML heavy
+Recommended by Salesforce (2025 onward)	✅ Yes	⚠️ Legacy
+
+So → always build new UIs using LWC.
+
+🧩 STEP 3 – LWC File Structure
+
+When you create an LWC component, Salesforce generates three main files:
+
+File	Purpose
+helloWorld.html	Template (UI structure)
+helloWorld.js	JavaScript logic (variables, events)
+helloWorld.js-meta.xml	Metadata file (defines where component can appear — Record Page, App, etc.)
