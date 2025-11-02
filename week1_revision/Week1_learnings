@@ -23,3 +23,64 @@ Example analogy:
 
 A “Remote Control” class has functions: turnOn(), turnOff(), increaseVolume()
 Similarly, an “AccountUtility” class can have: getAccounts(), createAccount(), deleteAccount()
+
+
+⚙️ WEEK 1 → DAY 2 (Apex Trigger Fundamentals + Hands-on)
+
+📅 Date: Oct 30
+🎯 Goal: Understand what an Apex Trigger is, when and how it runs, and deploy your first trigger in VS Code.
+
+🧠 STEP 1 – Understand What a Trigger Is
+💡 Definition
+
+An Apex Trigger is a piece of code that automatically executes when a data event occurs (insert, update, delete, etc.) on a Salesforce Object.
+
+Think of it as:
+
+“When something happens to a record → do this additional logic.”
+
+🧩 STEP 2 – Why We Use Triggers
+Use Case	Example
+Auto-populate a field	Set “Description” whenever an Account is created
+Validate data before saving	Stop insert if a field is blank
+Update related records	When an Opportunity closes, update Account status
+Create child records	When a new Account is inserted, create a default Contact
+
+⚠️ Triggers run before or after database operations (DML).
+
+⚙️ STEP 3 – Trigger Context & Events
+Event	When It Runs	Typical Use
+before insert	Before record is saved	Modify fields or validate data
+after insert	After record is saved	Create related records
+before update	Before existing record is updated	Validate changes
+after update	After record is updated	Trigger further actions
+before/after delete	When record is deleted	Clean up related data⚙️ WEEK 1 → DAY 2 (Apex Trigger Fundamentals + Hands-on)
+
+📅 Date: Oct 30
+🎯 Goal: Understand what an Apex Trigger is, when and how it runs, and deploy your first trigger in VS Code.
+
+🧠 STEP 1 – Understand What a Trigger Is
+💡 Definition
+
+An Apex Trigger is a piece of code that automatically executes when a data event occurs (insert, update, delete, etc.) on a Salesforce Object.
+
+Think of it as:
+
+“When something happens to a record → do this additional logic.”
+
+🧩 STEP 2 – Why We Use Triggers
+Use Case	Example
+Auto-populate a field	Set “Description” whenever an Account is created
+Validate data before saving	Stop insert if a field is blank
+Update related records	When an Opportunity closes, update Account status
+Create child records	When a new Account is inserted, create a default Contact
+
+⚠️ Triggers run before or after database operations (DML).
+
+⚙️ STEP 3 – Trigger Context & Events
+Event	When It Runs	Typical Use
+before insert	Before record is saved	Modify fields or validate data
+after insert	After record is saved	Create related records
+before update	Before existing record is updated	Validate changes
+after update	After record is updated	Trigger further actions
+before/after delete	When record is deleted	Clean up related data
