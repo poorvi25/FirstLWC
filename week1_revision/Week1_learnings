@@ -114,3 +114,15 @@ File	Purpose
 helloWorld.html	Template (UI structure)
 helloWorld.js	JavaScript logic (variables, events)
 helloWorld.js-meta.xml	Metadata file (defines where component can appear — Record Page, App, etc.)
+
+Summary of How It Works Internally
+
+- Salesforce injects recordId into your component when it’s placed on a record page.
+
+- LWC detects that recordId changed.
+
+- Because you prefixed $recordId ($ - reactive variable) in your @wire parameters → the wire function re-runs automatically.
+
+- getRecord fetches new data → updates the bound variable (this.record).
+
+- UI updates automatically.

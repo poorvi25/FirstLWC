@@ -1,0 +1,14 @@
+<template>
+  <lightning-card title="Account Info">
+    <template if:true={record.data}>
+      <p class="slds-p-around_medium">
+        <b>Name:</b> {name}<br/>
+        <b>Phone:</b> {phone}
+      </p>
+    </template>
+
+    <template if:true={record.error}>
+      <p class="slds-text-color_error slds-p-around_small">Error loading record</p>
+    </template>
+  </lightning-card>
+</template>
