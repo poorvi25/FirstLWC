@@ -126,3 +126,18 @@ Summary of How It Works Internally
 - getRecord fetches new data → updates the bound variable (this.record).
 
 - UI updates automatically.
+
+Example Quiz (interview tip)
+
+🧩 Question: What happens if you remove $ from $recordId inside your @wire decorator?
+Answer: The record ID becomes static; @wire will not re-run when the record changes, and the component won’t refresh on navigation.
+
+
+SOSL & SOQL:
+
+| Type     | Full Form                         | Purpose                                                   |
+| -------- | --------------------------------- | --------------------------------------------------------- |
+| **SOQL** | Salesforce Object Query Language  | Fetch records from **one object (and its relationships)** |
+| **SOSL** | Salesforce Object Search Language | Search a text term across **multiple objects** at once    |
+
+
