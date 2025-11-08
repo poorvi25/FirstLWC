@@ -8,6 +8,14 @@
                         onclick={handleSearch}></lightning-button>
     </div>
 
+     <!-- 🔹 Show spinner while loading -->
+    <template if:true={isLoading}>
+      <lightning-spinner alternative-text="Loading Accounts"
+                         size="medium">
+      </lightning-spinner>
+    </template>
+
+    <!-- 🔹 Show table only when accounts exist -->
     <template if:true={accounts}>
       <lightning-datatable key-field="Id"
                            data={accounts}
@@ -15,6 +23,7 @@
       </lightning-datatable>
     </template>
 
+    <!-- 🔹 Show error or empty message -->
     <template if:true={error}>
       <p class="slds-text-color_error slds-p-around_small">
         {error}

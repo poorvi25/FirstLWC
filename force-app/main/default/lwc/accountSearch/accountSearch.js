@@ -17,14 +17,22 @@ export default class AccountSearch extends LightningElement {
     }
 
     handleSearch() {
+        this.isLoading = true;   // 🌀 show spinner
+        this.error = undefined;
+        this.accounts = undefined;
+
         getAccountsByIndustry({ industry: this.industry })
             .then(result => {
-                this.accounts = result;
-                this.error = undefined;
+                this.isLoading = false;  // hide spinner
+                if (result.length > 0) {
+                    this.accounts = result;
+                } else {
+                    this.error = 'No Accounts Found.';
+                }
             })
             .catch(error => {
+                this.isLoading = false;
                 this.error = error.body.message;
-                this.accounts = undefined;
             });
     }
 }
