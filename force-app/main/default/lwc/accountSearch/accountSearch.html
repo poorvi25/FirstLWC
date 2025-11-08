@@ -1,0 +1,24 @@
+<template>
+  <lightning-card title="Account Search">
+    <div class="slds-p-around_medium">
+      <lightning-input label="Enter Industry" value={industry}
+                       onchange={handleChange}></lightning-input>
+      <lightning-button label="Search" variant="brand"
+                        class="slds-m-top_small"
+                        onclick={handleSearch}></lightning-button>
+    </div>
+
+    <template if:true={accounts}>
+      <lightning-datatable key-field="Id"
+                           data={accounts}
+                           columns={columns}>
+      </lightning-datatable>
+    </template>
+
+    <template if:true={error}>
+      <p class="slds-text-color_error slds-p-around_small">
+        {error}
+      </p>
+    </template>
+  </lightning-card>
+</template>

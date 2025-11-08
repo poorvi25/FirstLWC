@@ -140,4 +140,22 @@ SOSL & SOQL:
 | **SOQL** | Salesforce Object Query Language  | Fetch records from **one object (and its relationships)** |
 | **SOSL** | Salesforce Object Search Language | Search a text term across **multiple objects** at once    |
 
+| Scenario                             | Use SOQL | Use SOSL |
+| ------------------------------------ | -------- | -------- |
+| Need data from one object            | ✅        | ❌        |
+| Need to filter on field values       | ✅        | ❌        |
+| Need to search text across objects   | ❌        | ✅        |
+| Searching a keyword typed by user    | ❌        | ✅        |
+| Display related records in LWC table | ✅        | ❌        |
 
+🧠 STEP 1 – Understand What “Imperative Apex Call” Means
+
+In @wire, Salesforce handles the call automatically.
+
+In an imperative call, you decide when to call Apex — usually after a button click or user input.
+
+This gives you more control (great for search, filters, save/update operations).
+
+Think:
+
+“When the user clicks Search → fetch data from Apex manually.”
