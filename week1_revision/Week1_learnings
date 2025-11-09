@@ -159,3 +159,45 @@ This gives you more control (great for search, filters, save/update operations).
 Think:
 
 “When the user clicks Search → fetch data from Apex manually.”
+----------------------------------------------------------------
+Week 3 day 3
+
+🔹 Pagination
+
+When there are many records, you don’t want to fetch all 1000 at once.
+Instead, you fetch e.g. 10 records → show → click Next → fetch next 10.
+
+🔹 Sorting
+
+Lightning Datatable lets you click a column header to reorder data by that field (ascending or descending).
+You’ll control that logic in JavaScript.
+
+Database.query(fullQuery)
+Dynamic SOQL
+Executes query built as a string
+
+💡 What is @track in LWC?
+
+In LWC, @track is used to make a variable reactive — meaning if that variable’s value changes, the UI automatically updates to reflect the new data.
+
+Think of it like telling LWC:
+
+“Hey Salesforce, keep an eye on this variable — if it changes, re-render the template.”
+
+If we wont use any decorator what happens-
+
+| Data Type | Without Decorator                   | With `@track` | Behavior                                                           |
+| --------- | ----------------------------------- | ------------- | ------------------------------------------------------------------ |
+| `String`  | ✅ Reactive                          | ✅ Reactive    | Works either way                                                   |
+| `Number`  | ✅ Reactive                          | ✅ Reactive    | Works either way                                                   |
+| `Boolean` | ✅ Reactive                          | ✅ Reactive    | Works either way                                                   |
+| `Array`   | ⚠️ Not reactive on internal changes | ✅ Reactive    | Add/remove elements won’t re-render unless reassigned              |
+| `Object`  | ⚠️ Not reactive on internal changes | ✅ Reactive    | Inner property changes won’t reflect unless `@track` or reassigned |
+------------------------------
+| Situation                     | What to Use                 |
+| ----------------------------- | --------------------------- |
+| Simple string/number          | Nothing                     |
+| List of records               | `@track` or reassign array  |
+| Object with nested fields     | `@track` or reassign object |
+| Data shared with parent       | `@api`                      |
+| Data fetched from Apex or LDS | `@wire`                     |

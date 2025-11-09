@@ -15,12 +15,23 @@
       </lightning-spinner>
     </template>
 
-    <!-- 🔹 Show table only when accounts exist -->
+   <!-- Data Table -->
     <template if:true={accounts}>
       <lightning-datatable key-field="Id"
                            data={accounts}
-                           columns={columns}>
+                           columns={columns}
+                           onsort={handleSort}
+                           sorted-by={sortField}
+                           sorted-direction={sortDirection}>
       </lightning-datatable>
+
+      <div class="slds-m-top_small slds-align_absolute-center">
+        <lightning-button label="Previous" onclick={handlePrev}
+                          disabled={disablePrev}></lightning-button>
+        <lightning-button label="Next" onclick={handleNext}
+                          class="slds-m-left_small"
+                          disabled={disableNext}></lightning-button>
+      </div>
     </template>
 
     <!-- 🔹 Show error or empty message -->
