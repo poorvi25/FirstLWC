@@ -194,6 +194,13 @@ If we wont use any decorator what happens-
 | `Array`   | ⚠️ Not reactive on internal changes | ✅ Reactive    | Add/remove elements won’t re-render unless reassigned              |
 | `Object`  | ⚠️ Not reactive on internal changes | ✅ Reactive    | Inner property changes won’t reflect unless `@track` or reassigned |
 ------------------------------
+ALL KINDS OF DECORATOR IN LWC-
+| Decorator | Meaning                                          | Used For                        | Reactivity                           | Example                             |
+| --------- | ------------------------------------------------ | ------------------------------- | ------------------------------------ | ----------------------------------- |
+| `@track`  | Make property reactive (esp. for objects/arrays) | Internal variables              | ✅ UI auto-updates when value changes | `@track user = { name: 'Poorvi' };` |
+| `@api`    | Make property/method public                      | Parent → Child communication    | ⚙️ Controlled by parent              | `@api message;`                     |
+| `@wire`   | Wire Apex or Salesforce data                     | Auto-fetching data from backend | ✅ Auto-updates when param changes    | `@wire(getAccounts) accounts;`      |
+
 | Situation                     | What to Use                 |
 | ----------------------------- | --------------------------- |
 | Simple string/number          | Nothing                     |
@@ -201,3 +208,43 @@ If we wont use any decorator what happens-
 | Object with nested fields     | `@track` or reassign object |
 | Data shared with parent       | `@api`                      |
 | Data fetched from Apex or LDS | `@wire`                     |
+-------------------------------------------------------------------------------------------------
+Week 3 day 4
+
+🌍 What Is NavigationMixin in LWC?
+
+The NavigationMixin is a Salesforce-provided JavaScript mixin that allows your Lightning Web Component to navigate the user to different pages —
+just like clicking a link or button in the Salesforce UI.
+
+Think of it as:
+
+“A built-in helper that lets my LWC open other pages inside Salesforce Lightning Experience — record pages, list views, URLs, files, etc.”
+
+⚙️ Why We Need It
+
+Normally, JavaScript in a browser can’t directly control Salesforce’s internal navigation (record pages, setup pages, etc.),
+because those routes are handled inside the Lightning framework — not normal URLs.
+import { NavigationMixin } from 'lightning/navigation';
+
+export default class AccountSearch extends NavigationMixin(LightningElement) {
+
+this[NavigationMixin.Navigate](pageReference);
+
+🧠 What Is a Page Reference?
+
+A Page Reference is simply a JavaScript object that describes what and where you want to navigate.
+
+{
+  type: 'standard__recordPage',
+  attributes: {
+    recordId: '001xxxxxxxxxxxx',
+    objectApiName: 'Account',
+    actionName: 'view'
+  }
+}
+| Key             | Meaning                                                       |
+| --------------- | ------------------------------------------------------------- |
+| `type`          | What kind of page to open (record page, list view, URL, etc.) |
+| `recordId`      | The Salesforce record ID                                      |
+| `objectApiName` | Object name (`Account`, `Contact`, etc.)                      |
+| `actionName`    | What to do — `view`, `edit`, or `clone`                       |

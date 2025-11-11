@@ -1,10 +1,14 @@
 import { LightningElement, track } from 'lwc';
 import getAccountsByIndustry from '@salesforce/apex/AccountController.getAccountsByIndustry';
+import { NavigationMixin } from 'lightning/navigation';   // 👈 for record navigation
 
-export default class AccountSearch extends LightningElement {
+export default class AccountSearch extends NavigationMixin(LightningElement) {
     @track industry = '';
     @track accounts;
     @track error;
+    @track isModalOpen = false;
+    @track selectedAccount = {};
+
     
     // Pagination state
     pageSize = 10;
@@ -15,14 +19,40 @@ export default class AccountSearch extends LightningElement {
     // default Sorting state
     sortField = 'Name';
     sortDirection = 'ASC';
+       columns = [
+    { label: 'Name', fieldName: 'Name', sortable: true },
+    { label: 'Industry', fieldName: 'Industry', sortable: true },
+    { label: 'Phone', fieldName: 'Phone' },
+    { label: 'Website', fieldName: 'Website' },
+    {
+        type: 'button',
+        typeAttributes: { label: 'View Details', name: 'view_details', variant: 'brand' }
+    }
+];
 
-    columns = [
-        { label: 'Name', fieldName: 'Name', sortable: true },
-        { label: 'Industry', fieldName: 'Industry', sortable: true },
-        { label: 'Phone', fieldName: 'Phone', sortable: true },
-        { label: 'Phone', fieldName: 'Phone', sortable: true }
-    ];
+    // ⚙️ Datatable row click handler
+    handleRowAction(event) {
+    const actionName = event.detail.action.name;
+    if (actionName === 'view_details') {
+        this.selectedAccount = event.detail.row;
+        this.isModalOpen = true;
+    }
+}
 
+    closeModal() {
+        this.isModalOpen = false;
+    }
+
+    navigateToRecord() {
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: this.selectedAccount.Id,
+                objectApiName: 'Account',
+                actionName: 'view'
+            }
+        });
+    }
     handleChange(event) {
         this.industry = event.target.value;
     }
