@@ -1,0 +1,26 @@
+<template>
+  <lightning-card title="Create New Account">
+    <div class="slds-p-around_medium">
+
+      <lightning-input label="Account Name" value={accName} onchange={handleChange}></lightning-input>
+      <lightning-input label="Industry" value={industry} onchange={handleChange}></lightning-input>
+      <lightning-input label="Phone" value={phone} onchange={handleChange}></lightning-input>
+
+      <lightning-button 
+          label="Create Account" 
+          variant="brand" 
+          class="slds-m-top_small"
+          onclick={handleCreate}>
+      </lightning-button>
+
+      <template if:true={message}>
+        <p class="slds-text-color_success slds-m-top_small">{message}</p>
+      </template>
+
+      <template if:true={error}>
+        <p class="slds-text-color_error slds-m-top_small">{error}</p>
+      </template>
+
+    </div>
+  </lightning-card>
+</template>
