@@ -33,6 +33,10 @@ export default class CreateAccountForm extends LightningElement {
                 this.accName = '';
                 this.industry = '';
                 this.phone = '';
+               // 🔥 dispatch event so parent can refresh
+               //“Hey parent, a new record was created!”
+                this.dispatchEvent(new CustomEvent('recordcreated'));
+
             })
             .catch(error => {
                 this.error = error.body.message;

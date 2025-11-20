@@ -248,3 +248,20 @@ A Page Reference is simply a JavaScript object that describes what and where you
 | `recordId`      | The Salesforce record ID                                      |
 | `objectApiName` | Object name (`Account`, `Contact`, etc.)                      |
 | `actionName`    | What to do — `view`, `edit`, or `clone`                       |
+-----------------------------------------------
+⭐ What does dispatchEvent() do? (Layman's Explanation)
+
+Think of it like this:
+
+👉 A child LWC wants to tell the parent LWC that something happened
+
+So the child sends a signal/message.
+
+That signal is the Custom Event.
+
+dispatchEvent() allows a child LWC to notify the parent that something happened (like button clicked, record created, etc).
+⭐ Real World Analogy
+
+👍 Child = ringing a doorbell
+👍 dispatchEvent = pressing the bell button
+👍 Parent = hears the ring and responds

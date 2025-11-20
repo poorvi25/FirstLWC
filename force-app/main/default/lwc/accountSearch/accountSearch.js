@@ -1,4 +1,4 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 import getAccountsByIndustry from '@salesforce/apex/AccountController.getAccountsByIndustry';
 import { NavigationMixin } from 'lightning/navigation';   // 👈 for record navigation
 
@@ -104,4 +104,9 @@ fetchAccounts() {
         this.sortDirection = event.detail.sortDirection.toUpperCase();
         this.fetchAccounts();
     }
+
+    @api refreshList() {
+    this.fetchAccounts();
+}
+
 }
