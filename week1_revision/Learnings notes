@@ -265,3 +265,217 @@ dispatchEvent() allows a child LWC to notify the parent that something happened 
 👍 Child = ringing a doorbell
 👍 dispatchEvent = pressing the bell button
 👍 Parent = hears the ring and responds
+
+-------------------------------
+Perfect Poorvi 🌸 — let’s explain each concept **in the simplest and clearest way**, so these topics become permanently strong for you.
+
+---
+
+# ⭐ 1️⃣ **What is @wire decorator? (Simplest Explanation)**
+
+### 👉 @wire is **auto-call + auto-refresh + auto-data-binding**.
+
+It does 3 things:
+
+### ✔ **Automatically calls Apex method**
+
+You don't need to call it manually.
+
+```js
+@wire(getAllStudents) wiredStudents;
+```
+
+Salesforce calls `getAllStudents()` automatically.
+
+---
+
+### ✔ **Automatically updates LWC when backend data changes**
+
+If the data on the server changes → component updates.
+
+Example:
+
+* You create a new student
+* You refresh the page
+* @wire fetches fresh data
+
+---
+
+### ✔ **Saves the result into a variable for UI**
+
+The result comes into:
+
+```js
+wiredStudents({data, error})
+```
+
+You use:
+
+```js
+this.students = data;
+```
+
+---
+
+### ⭐ SHORTCUT memory trick:
+
+> **@wire = Auto call + Auto refresh + Auto bind**
+
+---
+
+# ⭐ 2️⃣ **What is columns[] array in Lightning Datatable?**
+
+Lightning Datatable needs:
+
+* What fields to show
+* What labels to display
+* Column order
+* Whether sortable or not
+* Buttons, URLs, types
+
+All this is controlled by **columns array**.
+
+Example:
+
+```js
+columns = [
+    { label: 'Name', fieldName: 'Name' },
+    { label: 'Email', fieldName: 'Email__c' },
+    { label: 'Class', fieldName: 'Class__c' },
+    { label: 'Phone', fieldName: 'Phone__c' }
+];
+```
+
+### Column properties:
+
+| Property           | Meaning                                   |
+| ------------------ | ----------------------------------------- |
+| **label**          | What user sees in table                   |
+| **fieldName**      | Which field from Apex you want to show    |
+| **sortable**       | Allows sorting on click                   |
+| **type**           | text, phone, email, currency, button, url |
+| **typeAttributes** | For custom buttons                        |
+
+Example for a button:
+
+```js
+{
+  type: 'button',
+  typeAttributes: { label: 'View', name: 'view', variant: 'brand' }
+}
+```
+
+---
+
+### ⭐ Memory trick:
+
+> **columns[] tells datatable WHAT to display + HOW to display**
+
+---
+
+# ⭐ 3️⃣ **Why use @AuraEnabled(cacheable=true)?**
+
+This is for **get** methods (fetching data).
+
+Example:
+
+```apex
+@AuraEnabled(cacheable=true)
+public static List<Student__c> getAllStudents() { ... }
+```
+
+### ✔ Salesforce stores result in **client-side cache**
+
+So second time:
+
+* No network call
+* Much faster
+* Better performance
+
+---
+
+### ✔ Required when you use @wire
+
+@wire **needs** `cacheable=true` for read-only Apex methods.
+
+If you don't use it, you get error:
+
+```
+This Apex method must be cacheable when used with @wire
+```
+
+---
+
+### ✔ Only used for READ operations (SELECT)
+
+Not for:
+
+* Insert
+* Update
+* Delete
+
+For example:
+
+❌ Wrong:
+`createStudent()` cannot be cacheable
+Because it's modifying database.
+
+---
+
+### ⭐ Memory trick:
+
+> **cacheable=true = faster + offline-ready + required for @wire**
+
+---
+
+# ⭐ 4️⃣ **Debug any error**
+
+Common errors & meaning:
+
+---
+
+### ❌ **Error 1: "Invalid type Student__c"**
+
+Meaning → Object not created
+Fix → Create Student__c object
+
+---
+
+### ❌ **Error 2: "DML requires SObject"**
+
+Meaning → You are inserting a non-SObject
+Fix → Apex method must accept Student__c, not a map or JS object
+
+---
+
+### ❌ **Error 3: "This Apex method must be cacheable when using @wire"**
+
+Fix → Add `cacheable=true`
+
+---
+
+### ❌ **Error 4: "Unexpected token null"**
+
+Meaning → UI sent undefined value
+Fix → Ensure inputs are not blank
+
+---
+
+### ❌ **Error 5: Datatable not showing data**
+
+Checklist:
+
+* Apex returns list
+* Field names match API names
+* columns[] fieldName matches API name
+* wired method assigns data properly
+
+---
+
+### ❌ **Error 6: "LWC1503 parsing error"**
+
+Meaning → Missing comma, } or )
+Fix → Use VS Code formatting (Shift+Alt+F)
+
+---
+

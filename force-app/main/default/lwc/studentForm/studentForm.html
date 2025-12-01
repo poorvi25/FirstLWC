@@ -1,0 +1,36 @@
+<template>
+    <lightning-card title="Create Student">
+        <div class="slds-p-around_medium">
+
+            <lightning-input 
+                name="name"
+                label="Full Name"
+                value={name}
+                onchange={handleInput}>
+            </lightning-input>
+
+            <lightning-input 
+                name="email"
+                type="email"
+                label="Email"
+                value={email}
+                onchange={handleInput}>
+            </lightning-input>
+
+            <lightning-input 
+                name="classValue"
+                label="Class"
+                value={classValue}
+                onchange={handleInput}>
+            </lightning-input>
+
+            <lightning-button 
+                class="slds-m-top_medium"
+                label="Create Student"
+                variant="brand"
+                onclick={createStudentRecord}>
+            </lightning-button>
+
+        </div>
+    </lightning-card>
+</template>
