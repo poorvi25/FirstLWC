@@ -1,0 +1,186 @@
+
+
+# ⭐ **Student App**
+
+## **1. Project Structure**
+
+* **studentApp** → Parent LWC
+* **studentForm** → Child component (Create Student)
+* **studentList** → Child component (List + Delete + Refresh)
+
+Parent wraps both children and handles communication.
+
+---
+
+## **2. Salesforce Backend Setup**
+
+### ✔ Created Custom Object: **Student__c**
+
+Fields:
+
+* Name (Standard)
+* Email__c (Email)
+* Class__c (Text)
+* Phone__c (Phone)
+
+This object stores all student records.
+
+---
+
+## **3. Create Student Feature (studentForm)**
+
+### ✔ HTML:
+
+* Three input fields: Name, Email, Class
+* Button → “Create Student”
+
+### ✔ JS Logic:
+
+* Collects input values
+* Builds a student object
+* Calls Apex method `createStudent`
+* Shows success toast
+* Clears form
+* Fires a custom event:
+
+```js
+this.dispatchEvent(new CustomEvent('studentcreated'));
+```
+
+Purpose: notify parent that a new student is added.
+
+---
+
+## **4. Apex – Create Student**
+
+In **StudentController.cls**:
+
+```apex
+@AuraEnabled
+public static Student__c createStudent(Student__c student) {
+    insert student;
+    return student;
+}
+```
+
+Inserts new record into Student__c.
+
+---
+
+## **5. List Students Feature (studentList)**
+
+### ✔ HTML:
+
+* Lightning Datatable showing:
+
+  * Name
+  * Email
+  * Class
+  * Phone
+
+### ✔ JS Logic:
+
+* Uses `@wire(getAllStudents)` to fetch list
+* Stores wire result for refreshing
+* Contains public method:
+
+```js
+@api refreshList() {
+    return refreshApex(this.wiredResult);
+}
+```
+
+This re-runs the wire method and updates the table immediately.
+
+---
+
+## **6. Apex – Get All Students**
+
+```apex
+@AuraEnabled(cacheable=true)
+public static List<Student__c> getAllStudents() {
+    return [SELECT Id, Name, Email__c, Class__c, Phone__c FROM Student__c];
+}
+```
+
+---
+
+## **7. Parent Component Communication (studentApp)**
+
+### ✔ Receives event from form:
+
+```html
+<c-student-form onstudentcreated={handleStudentCreated}></c-student-form>
+```
+
+### ✔ Handles event:
+
+```js
+handleStudentCreated() {
+    const listCmp = this.template.querySelector('c-student-list');
+    listCmp.refreshList();
+}
+```
+
+Purpose:
+When a student is created → refresh the list automatically.
+
+---
+
+## **8. Delete Student Feature**
+
+Added a Delete button inside datatable:
+
+```js
+{
+    type: 'button',
+    typeAttributes: {
+        label: 'Delete',
+        name: 'delete',
+        variant: 'destructive'
+    }
+}
+```
+
+### ✔ Row Action Handler:
+
+```js
+handleRowAction(event) {
+    if (event.detail.action.name === 'delete') {
+        this.deleteStudent(event.detail.row.Id);
+    }
+}
+```
+
+### ✔ Apex Method – Delete Student:
+
+```apex
+@AuraEnabled
+public static void deleteStudent(Id studentId) {
+    delete [SELECT Id FROM Student__c WHERE Id = :studentId];
+}
+```
+
+### ✔ Refresh After Delete:
+
+```js
+this.refreshList();
+```
+
+---
+
+# ⭐ **End Result So Far**
+
+You have a fully working **CRUD (Create + Read + Delete)** Student App:
+
+* Create Student
+* Auto-refresh list after creation
+* Show student table
+* Delete student with toast notification
+* Parent-child communication
+* Apex integration
+* Real-time UI updates
+
+Everything is now working like a real Salesforce production app.
+
+---

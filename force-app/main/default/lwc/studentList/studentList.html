@@ -2,10 +2,12 @@
     <lightning-card title="Students List">
         <div class="slds-p-around_medium">
             <lightning-datatable
-                key-field="Id"
-                data={students}
-                columns={columns}>
-            </lightning-datatable>
+            key-field="Id"
+            data={students}
+            columns={columns}
+            onrowaction={handleRowAction}>
+         </lightning-datatable>
+            
         </div>
     </lightning-card>
 </template>

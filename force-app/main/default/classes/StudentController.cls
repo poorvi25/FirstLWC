@@ -18,5 +18,9 @@ public with sharing class StudentController {
         ORDER BY CreatedDate DESC
     ];
 }
+   @AuraEnabled
+   public static void deleteStudent(Id studentId) {
+    delete [SELECT Id FROM Student__c WHERE Id = :studentId];
+  }
 
 }

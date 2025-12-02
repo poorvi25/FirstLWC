@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="Student Management App">
+        <div class="slds-p-around_medium">
+
+            <c-student-form 
+                onstudentcreated={handleStudentCreated}>
+            </c-student-form>
+
+            <br/>
+
+            <c-student-list></c-student-list>
+
+        </div>
+    </lightning-card>
+</template>

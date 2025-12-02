@@ -4,22 +4,15 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class StudentForm extends LightningElement {
 
-    @track name = '';
-    @track email = '';
-    @track classValue = '';
+    name = '';
+    email = '';
+    classValue = '';
 
     handleInput(event) {
         this[event.target.name] = event.target.value;
     }
 
     createStudentRecord() {
-
-        // Validation
-        if (!this.name) {
-            this.showToast("Error", "Name is required", "error");
-            return;
-        }
-
         const studentObj = {
             Name: this.name,
             Email__c: this.email,
@@ -27,17 +20,23 @@ export default class StudentForm extends LightningElement {
         };
 
         createStudent({ student: studentObj })
-        .then(result => {
-            this.showToast("Success", "Student created successfully", "success");
+            .then(() => {
 
-            // Clear fields
-            this.name = '';
-            this.email = '';
-            this.classValue = '';
-        })
-        .catch(error => {
-            this.showToast("Error", error.body.message, "error");
-        });
+                this.showToast("Success", "Student created successfully", "success");
+
+                // CLEAR INPUTS
+                this.name = '';
+                this.email = '';
+                this.classValue = '';
+
+                // VERY IMPORTANT → Fire event
+                console.log("CHILD FIRING EVENT studentcreated");
+                this.dispatchEvent(new CustomEvent('studentcreated'));
+
+            })
+            .catch(error => {
+                this.showToast("Error", error.body.message, "error");
+            });
     }
 
     showToast(title, message, variant) {
