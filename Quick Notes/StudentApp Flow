@@ -183,4 +183,141 @@ You have a fully working **CRUD (Create + Read + Delete)** Student App:
 
 Everything is now working like a real Salesforce production app.
 
----
+-------------------------------
+EDIT flow:
+User clicks Edit →
+    Show modal →
+        Pre-fill old values →
+            User edits →
+                Call Apex update →
+                    Close modal →
+                        Refresh datatable →
+                            Updated values visible immediately
+
+
+The Student App has -
+CRUD operation representation 
+-----------------------------
+Search Flow:
+
+User types in search box →
+    LWC captures text →
+        LWC looks at all students →
+            LWC filters the list →
+                Datatable updates instantly →
+                    No Apex calls needed
+
+
+⭐ SEARCH FEATURE — SIMPLE EXPLANATION
+
+Right now, your studentList component loads all students using @wire:
+
+wiredStudents(result) {
+    this.wiredResult = result;
+    this.students = result.data;
+}
+
+
+So this.students already contains every student record.
+
+Now the user wants to SEARCH for something, for example:
+
+“A”
+
+“Poorvi”
+
+“gmail”
+
+“Class A”
+
+So we need a way to filter the list.
+
+That is what your search feature does.
+
+⭐ PART 1 — User Types Something
+
+You added a search input:
+
+<lightning-input 
+    placeholder="Search by name, email or class"
+    value={searchKey}
+    onchange={handleSearchChange}>
+</lightning-input>
+
+
+Meaning:
+
+Whenever user types something → handleSearchChange() runs
+
+The text they typed goes into searchKey
+
+⭐ PART 2 — Store the text
+handleSearchChange(event) {
+    this.searchKey = event.target.value;
+    this.filterRecords();   // filter list
+}
+
+
+Meaning:
+
+Store the typed text in searchKey
+
+Then call filterRecords() to actually filter the list
+
+⭐ PART 3 — Filter Logic (THE MAIN PART)
+filterRecords() {
+    if (!this.searchKey) {
+        this.students = this.wiredResult.data; // show full list
+        return;
+    }
+
+    const lower = this.searchKey.toLowerCase();
+
+    this.students = this.wiredResult.data.filter(student =>
+        student.Name?.toLowerCase().includes(lower) ||
+        student.Email__c?.toLowerCase().includes(lower) ||
+        student.Class__c?.toLowerCase().includes(lower)
+    );
+}
+
+What this means:
+✔ 1. If search is EMPTY → show ALL records
+
+(This gives default behavior.)
+
+✔ 2. Convert the search text to lowercase
+
+(for case-insensitive matching)
+
+✔ 3. Loop through each student record
+
+and check:
+
+Does the Name contain the search text?
+
+OR does the Email contain the search text?
+
+OR does the Class contain the search text?
+
+If YES → keep that student
+If NO → hide that student
+
+✔ 4. Update the datatable by updating this.students
+⭐ NO APEX CALL IS NEEDED
+
+Why?
+
+Because you already have ALL records from @wire.
+So LWC can filter the list instantly without querying Salesforce again.
+
+This makes search:
+
+Fast
+
+Smooth
+
+Real-time
+
+Zero API cost
+
+Zero lag

@@ -23,4 +23,10 @@ public with sharing class StudentController {
     delete [SELECT Id FROM Student__c WHERE Id = :studentId];
   }
 
+  @AuraEnabled
+public static void updateStudent(Student__c student) {
+    update student;
+}
+
+
 }
