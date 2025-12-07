@@ -7,10 +7,16 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class StudentList extends LightningElement {
 
+    // Master list from Apex
     @track students = [];
+
+    // Only the current page slice
     @track paginatedStudents = [];
 
+    // Wire result for refreshApex
     wiredResult;
+
+    // Search
     searchKey = '';
 
     // Sorting
@@ -19,147 +25,110 @@ export default class StudentList extends LightningElement {
 
     // Pagination
     page = 1;
-    pageSize = 5;
+    pageSize = 5;   // ⭐ As per your choice
     totalPages = 0;
 
-    // Edit modal
+    // Edit Modal
     isEditModalOpen = false;
     editRecord = {};
 
-    // Datatable columns
+    // Columns
     columns = [
         { label: 'Name', fieldName: 'Name', sortable: true },
         { label: 'Email', fieldName: 'Email__c', sortable: true },
         { label: 'Class', fieldName: 'Class__c', sortable: true },
         { label: 'Phone', fieldName: 'Phone__c', sortable: true },
+
         {
             type: 'button',
-            typeAttributes: {
-                label: 'Edit',
-                name: 'edit',
-                variant: 'brand'
-            }
+            typeAttributes: { label: 'Edit', name: 'edit', variant: 'brand' }
         },
         {
             type: 'button',
-            typeAttributes: {
-                label: 'Delete',
-                name: 'delete',
-                variant: 'destructive'
-            }
+            typeAttributes: { label: 'Delete', name: 'delete', variant: 'destructive' }
         }
     ];
 
-    // Wire: Load students
+    // Load initial data
     @wire(getAllStudents)
     wiredStudents(result) {
         this.wiredResult = result;
+
         if (result.data) {
             this.students = result.data;
-            this.totalPages = Math.ceil(this.students.length / this.pageSize);
-            this.updatePaginatedList();
+            this.applyAll();   // ⭐ Apply search+sort+pagination
         }
+    }
+
+    // ⭐ MAIN PIPELINE: Search → Sort → Pagination
+    applyAll() {
+        let data = [...this.students];
+
+        // 1️⃣ Search
+        if (this.searchKey) {
+            const s = this.searchKey.toLowerCase();
+            data = data.filter(stu =>
+                (stu.Name && stu.Name.toLowerCase().includes(s)) ||
+                (stu.Email__c && stu.Email__c.toLowerCase().includes(s)) ||
+                (stu.Class__c && stu.Class__c.toLowerCase().includes(s))
+            );
+        }
+
+        // 2️⃣ Sort
+        data.sort((a, b) => {
+            let v1 = a[this.sortedBy] ? a[this.sortedBy].toString().toLowerCase() : '';
+            let v2 = b[this.sortedBy] ? b[this.sortedBy].toString().toLowerCase() : '';
+
+            return this.sortedDirection === 'asc'
+                ? (v1 > v2 ? 1 : -1)
+                : (v1 < v2 ? 1 : -1);
+        });
+
+        // 3️⃣ Pagination
+        this.totalPages = Math.ceil(data.length / this.pageSize);
+        if (this.page > this.totalPages) this.page = this.totalPages || 1;
+
+        const start = (this.page - 1) * this.pageSize;
+        const end = start + this.pageSize;
+
+        this.paginatedStudents = data.slice(start, end);
     }
 
     // SEARCH
     handleSearchChange(event) {
         this.searchKey = event.target.value.toLowerCase();
-        this.filterRecords();
+        this.page = 1;          // reset to page 1
+        this.applyAll();
     }
 
-    filterRecords() {
-        if (!this.searchKey) {
-            this.students = this.wiredResult.data;
-        } else {
-            const s = this.searchKey;
-            this.students = this.wiredResult.data.filter(
-                stu =>
-                    (stu.Name && stu.Name.toLowerCase().includes(s)) ||
-                    (stu.Email__c && stu.Email__c.toLowerCase().includes(s)) ||
-                    (stu.Class__c && stu.Class__c.toLowerCase().includes(s))
-            );
-        }
-        this.page = 1;
-        this.totalPages = Math.ceil(this.students.length / this.pageSize);
-        this.updatePaginatedList();
-    }
-
-    // SORTING
+    // SORT
     handleSort(event) {
         this.sortedBy = event.detail.fieldName;
         this.sortedDirection = event.detail.sortDirection;
-        this.sortData(this.sortedBy, this.sortedDirection);
+        this.applyAll();
     }
 
-    sortData(field, direction) {
-        let clone = [...this.students];
-
-        clone.sort((a, b) => {
-            let val1 = a[field] ? a[field].toString().toLowerCase() : '';
-            let val2 = b[field] ? b[field].toString().toLowerCase() : '';
-
-            return direction === 'asc'
-                ? (val1 > val2 ? 1 : -1)
-                : (val1 < val2 ? 1 : -1);
-        });
-
-        this.students = clone;
-        this.updatePaginatedList();
-    }
-
-    // PAGINATION
-    updatePaginatedList() {
-
-        //Record per page
-        const start = (this.page - 1) * this.pageSize;
-        const end = start + this.pageSize;
-
-        this.paginatedStudents = this.students.slice(start, end);
-    }
-
+    // PAGINATION BUTTONS
     nextPage() {
         if (this.page < this.totalPages) {
             this.page++;
-            this.updatePaginatedList();
+            this.applyAll();
         }
     }
 
     previousPage() {
         if (this.page > 1) {
             this.page--;
-            this.updatePaginatedList();
+            this.applyAll();
         }
     }
 
     get isPrevDisabled() {
-        //Disable prev if page 1
         return this.page === 1;
     }
 
     get isNextDisabled() {
-        //Disable next if last
         return this.page === this.totalPages || this.totalPages === 0;
-    }
-
-    // ROW ACTIONS
-    handleRowAction(event) {
-        const action = event.detail.action.name;
-        const row = event.detail.row;
-
-        if (action === 'edit') this.openEditModal(row);
-        if (action === 'delete') this.deleteStudent(row.Id);
-    }
-
-    // DELETE
-    deleteStudent(studentId) {
-        deleteStudent({ studentId })
-            .then(() => {
-                this.showToast('Deleted', 'Student deleted', 'success');
-                this.refreshList();
-            })
-            .catch(err => {
-                this.showToast('Error', err.body.message, 'error');
-            });
     }
 
     // EDIT
@@ -175,7 +144,7 @@ export default class StudentList extends LightningElement {
     saveUpdatedRecord() {
         updateStudent({ student: this.editRecord })
             .then(() => {
-                this.showToast('Success', 'Student updated', 'success');
+                this.showToast('Updated', 'Student updated successfully', 'success');
                 this.isEditModalOpen = false;
                 this.refreshList();
             })
@@ -188,16 +157,39 @@ export default class StudentList extends LightningElement {
         this.isEditModalOpen = false;
     }
 
-    // REFRESH LIST
-    @api refreshList() {
+    // DELETE
+    handleRowAction(event) {
+        const action = event.detail.action.name;
+        const row = event.detail.row;
+
+        if (action === 'delete') {
+            this.deleteStudent(row.Id);
+        } else if (action === 'edit') {
+            this.openEditModal(row);
+        }
+    }
+
+    deleteStudent(studentId) {
+        deleteStudent({ studentId })
+            .then(() => {
+                this.showToast('Deleted', 'Student deleted', 'success');
+                this.refreshList();
+            })
+            .catch(err => {
+                this.showToast('Error', err.body.message, 'error');
+            });
+    }
+
+    // REFRESH
+    @api
+    refreshList() {
         return refreshApex(this.wiredResult).then(() => {
             this.students = this.wiredResult.data;
-            this.totalPages = Math.ceil(this.students.length / this.pageSize);
-            this.updatePaginatedList();
+            this.applyAll();
         });
     }
 
-    // TOAST
+    // Toast helper
     showToast(title, message, variant) {
         this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
     }

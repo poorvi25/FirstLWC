@@ -2,16 +2,15 @@
     <lightning-card title="Students List">
         <div class="slds-p-around_medium">
 
-            <!-- SEARCH BAR -->
+            <!-- SEARCH -->
             <lightning-input 
                 type="search"
                 placeholder="Search by name, email or class"
                 onchange={handleSearchChange}>
             </lightning-input>
-
             <br/>
 
-            <!-- DATATABLE WITH PAGINATION DATA -->
+            <!-- DATATABLE -->
             <lightning-datatable
                 key-field="Id"
                 data={paginatedStudents}
@@ -49,11 +48,7 @@
 
     <!-- EDIT MODAL -->
     <template if:true={isEditModalOpen}>
-        <section
-            role="dialog"
-            tabindex="-1"
-            class="slds-modal slds-fade-in-open">
-
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
 
                 <header class="slds-modal__header">
@@ -87,7 +82,6 @@
                 </div>
 
                 <footer class="slds-modal__footer">
-
                     <lightning-button 
                         variant="neutral" 
                         label="Cancel" 
@@ -99,13 +93,10 @@
                         label="Save" 
                         onclick={saveUpdatedRecord}>
                     </lightning-button>
-
                 </footer>
-
             </div>
         </section>
 
         <div class="slds-backdrop slds-backdrop_open"></div>
     </template>
-
 </template>
